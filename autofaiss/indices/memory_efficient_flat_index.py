@@ -1,4 +1,4 @@
-""" This file contain a class describing a memory efficient flat index """
+"""This file contain a class describing a memory efficient flat index"""
 
 import heapq
 from typing import List, Optional, Tuple
@@ -132,10 +132,11 @@ class MemEfficientFlatIndex(FaissIndexWrapper):
             for j, inds in enumerate(ind_k_max):
                 for ind, distance in zip(inds, dist_arr[j, inds]):
                     true_ind = offset + ind if ind != -1 else -1
+                    entry = (float(distance), true_ind)
                     if len(h[j]) < k:
-                        heapq.heappush(h[j], (distance, true_ind))
+                        heapq.heappush(h[j], entry)
                     else:
-                        heapq.heappushpop(h[j], (distance, true_ind))
+                        heapq.heappushpop(h[j], entry)
 
             offset += batch_size
 
@@ -147,9 +148,9 @@ class MemEfficientFlatIndex(FaissIndexWrapper):
             # case where we couldn't find enough vectors
             max_k = min(k, len(h[i]))
             for j in range(max_k):
-                x = heapq.heappop(h[i])
-                D[i][max_k - 1 - j] = x[0]
-                I[i][max_k - 1 - j] = x[1]
+                distance_value, index_value = heapq.heappop(h[i])
+                D[i][max_k - 1 - j] = distance_value
+                I[i][max_k - 1 - j] = index_value
 
         return D, I
 
@@ -207,10 +208,11 @@ class MemEfficientFlatIndex(FaissIndexWrapper):
             for j, (distances, inds) in enumerate(zip(D_tmp, I_tmp)):
                 for distance, ind in zip(distances, inds):
                     true_ind: int = offset + ind if ind != -1 else -1
+                    entry = (float(distance), true_ind)
                     if len(h[j]) < k:
-                        heapq.heappush(h[j], (distance, true_ind))
+                        heapq.heappush(h[j], entry)
                     else:
-                        heapq.heappushpop(h[j], (distance, true_ind))
+                        heapq.heappushpop(h[j], entry)
 
             offset += batch_size
 
@@ -222,9 +224,9 @@ class MemEfficientFlatIndex(FaissIndexWrapper):
             # case where we couldn't find enough vectors
             max_k = min(k, len(h[i]))
             for j in range(max_k):
-                x = heapq.heappop(h[i])
-                D[i][max_k - 1 - j] = x[0]
-                I[i][max_k - 1 - j] = x[1]
+                distance_value, index_value = heapq.heappop(h[i])
+                D[i][max_k - 1 - j] = distance_value
+                I[i][max_k - 1 - j] = index_value
 
         return D, I
 
@@ -259,10 +261,11 @@ class MemEfficientFlatIndex(FaissIndexWrapper):
             for j, (distances, inds) in enumerate(zip(D_tmp, I_tmp)):
                 for distance, ind in zip(distances, inds):
                     true_ind: int = offset + ind if ind != -1 else -1
+                    entry = (float(distance), true_ind)
                     if len(h[j]) < k:
-                        heapq.heappush(h[j], (distance, true_ind))
+                        heapq.heappush(h[j], entry)
                     else:
-                        heapq.heappushpop(h[j], (distance, true_ind))
+                        heapq.heappushpop(h[j], entry)
 
             offset += emb_array.shape[0]
 
@@ -274,8 +277,8 @@ class MemEfficientFlatIndex(FaissIndexWrapper):
             # case where we couldn't find enough vectors
             max_k = min(k, len(h[i]))
             for j in range(max_k):
-                x = heapq.heappop(h[i])  # type: ignore
-                D[i][max_k - 1 - j] = x[0]
-                I[i][max_k - 1 - j] = x[1]
+                distance_value, index_value = heapq.heappop(h[i])
+                D[i][max_k - 1 - j] = distance_value
+                I[i][max_k - 1 - j] = index_value
 
         return D, I

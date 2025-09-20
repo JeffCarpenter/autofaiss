@@ -235,7 +235,7 @@ def _merge_index(
     with Timeit("-> Merging small indices", indent=4):
         with tqdm(total=nb_iterations) as pbar:
             for i in range(nb_iterations):
-                logger.debug("_merge_index: Starting iteration %d/%d", i+1, nb_iterations)
+                logger.debug("_merge_index: Starting iteration %d/%d", i + 1, nb_iterations)
                 to_downloads = small_indices_files[i * nb_files_each_time : min(n, (i + 1) * nb_files_each_time)]
                 logger.debug("_merge_index: Downloading %d files: %s", len(to_downloads), to_downloads)
 
@@ -248,9 +248,9 @@ def _merge_index(
                         merged_index = _merge_from_local(merged_index)
                         logger.debug("_merge_index: Merge from local completed successfully")
                     pbar.update(1)
-                    logger.debug("_merge_index: Iteration %d completed successfully", i+1)
+                    logger.debug("_merge_index: Iteration %d completed successfully", i + 1)
                 except Exception as e:
-                    logger.error("_merge_index: Iteration %d FAILED with error: %s", i+1, e)
+                    logger.error("_merge_index: Iteration %d FAILED with error: %s", i + 1, e)
                     logger.error("_merge_index: Error type: %s", type(e))
                     logger.error("_merge_index: Traceback: %s", traceback.format_exc())
                     raise

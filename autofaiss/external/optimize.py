@@ -1,4 +1,5 @@
-""" Functions to find optimal index parameters """
+"""Functions to find optimal index parameters"""
+
 import json
 import logging
 import re

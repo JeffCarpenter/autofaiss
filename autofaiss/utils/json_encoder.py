@@ -1,4 +1,5 @@
 """JSON encoder for numpy types"""
+
 import json
 import numpy as np
 
